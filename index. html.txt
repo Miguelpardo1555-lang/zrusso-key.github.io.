@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZRUSSO KEY SYSTEM</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0a0a0c; color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .container { background: #0e1212; border: 2px solid #00ffb4; border-radius: 16px; padding: 30px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 180, 0.2); }
+        h1 { color: #00ffb4; font-size: 24px; margin-bottom: 10px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0, 255, 180, 0.5); }
+        p { color: #a0a0a5; font-size: 14px; margin-bottom: 25px; }
+        .key-box { background-color: #141a1a; border: 1px dashed #00ffb4; padding: 15px; border-radius: 8px; font-size: 22px; font-weight: bold; color: #ffffff; letter-spacing: 3px; margin-bottom: 20px; text-shadow: 0 0 5px #fff; }
+        .btn-copy { background-color: #141a1a; border: 2px solid #00ffb4; color: #00ffb4; padding: 12px 25px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; width: 100%; letter-spacing: 1px; }
+        .btn-copy:hover { background-color: #00ffb4; color: #0a0a0c; box-shadow: 0 0 15px #00ffb4; }
+        .footer { margin-top: 25px; font-size: 11px; color: #55555c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>⚡ ZRUSSO KEY ⚡</h1>
+    <p>Copia tu llave diaria e ingrésala en el ejecutor Delta.</p>
+    
+    <div class="key-box" id="keyDisplay">CARGANDO...</div>
+    
+    <button class="btn-copy" id="copyBtn">COPIAR KEY</button>
+    
+    <div class="footer" id="expiryText">La llave cambia a la medianoche.</div>
+</div>
+
+<script>
+    // Generador matemático de Key diaria cambiante
+    function generateDailyKey() {
+        const d = new Date();
+        const dateString = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+        
+        // Algoritmo simple de encriptado diario (Crea un código único por fecha)
+        let hash = 0;
+        for (let i = 0; i < dateString.length; i++) {
+            hash = dateString.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        
+        // Convierte el hash en una palabra clave limpia (Ej: ZR-A1B2C3)
+        const code = Math.abs(hash).toString(16).toUpperCase().substring(0, 6);
+        return "ZR-" + code;
+    }
+
+    const currentKey = generateDailyKey();
+    document.getElementById("keyDisplay").innerText = currentKey;
+
+    // Botón de copiado automático para iPhone y Android
+    document.getElementById("copyBtn").addEventListener("click", function() {
+        navigator.clipboard.writeText(currentKey).then(() => {
+            const btn = document.getElementById("copyBtn");
+            btn.innerText = "¡COPIADO!";
+            btn.style.backgroundColor = "#00ffb4";
+            btn.style.color = "#0a0a0c";
+            setTimeout(() => {
+                btn.innerText = "COPIAR KEY";
+                btn.style.backgroundColor = "#141a1a";
+                btn.style.color = "#00ffb4";
+            }, 2000);
+        });
+    });
+</script>
+
+</body>
+</html>
